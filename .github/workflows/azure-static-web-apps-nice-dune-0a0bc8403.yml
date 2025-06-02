@@ -60,6 +60,7 @@ jobs:
           api_location: ""   # API source code path (empty if not used)
           output_location: "wwwroot"  # Deploy only the contents of the wwwroot folder
           github_id_token: ${{ steps.idtoken.outputs.result }}
+          app_build_command: ""
 
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
