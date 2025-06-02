@@ -45,9 +45,6 @@ jobs:
           rm -rf ./wwwroot/**/*.log
           # Add any other clean-up commands necessary for your app
 
-      - name: Install OIDC Client from Core Package
-        run: npm install @actions/core@1.6.0 @actions/http-client
-
       - name: Get Id Token
         uses: actions/github-script@v6
         id: idtoken
@@ -68,7 +65,8 @@ jobs:
           api_location: ""   # API source code path (empty if not used)
           output_location: "wwwroot"  # Deploy only the contents of the wwwroot folder
           github_id_token: ${{ steps.idtoken.outputs.result }}
-          app_build_command: ""
+          app_build_command: "dotnet publish -c Release -o ./wwwroot"
+
 
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
