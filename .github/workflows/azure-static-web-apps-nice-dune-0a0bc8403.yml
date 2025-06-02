@@ -44,6 +44,9 @@ jobs:
           rm -rf ./wwwroot/.git
           rm -rf ./wwwroot/**/*.log
           # Add any other clean-up commands necessary for your app
+          
+      - name: Install OIDC Client from Core Package
+        run: npm install @actions/core@1.6.0 @actions/http-client
 
       - name: Get Id Token
         uses: actions/github-script@v6
