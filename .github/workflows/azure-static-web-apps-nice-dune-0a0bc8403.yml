@@ -56,9 +56,9 @@ jobs:
         with:
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_NICE_DUNE_0A0BC8403 }}
           action: "upload"
-          app_location: "/"  # App source code path (root of the repo)
-          api_location: ""   # API source code path (empty if not used)
-          output_location: "wwwroot"  # Deploy only the contents of the wwwroot folder
+          app_location: "wwwroot"
+          api_location: ""
+          output_location: ""
           github_id_token: ${{ steps.idtoken.outputs.result }}
           app_build_command: ""
 
