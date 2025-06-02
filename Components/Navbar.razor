@@ -1,0 +1,55 @@
+﻿@using PortfolioManagerAPI.Models
+@using PortfolioManagerWASM.Helpers
+@using PortfolioManagerWASM.Services.IService
+@using Syncfusion.Blazor.SplitButtons
+
+<nav class="navbar justify-content-around">
+
+    <div class="row">
+        <div class="col-auto p-0">
+            <img class="brand-icon" src="icons/PM-icon.png" alt="BrandIcon">
+        </div>
+        <div class="col p-0">
+            <div class="brand-name">Portfolio<br />Manager</div>
+        </div>
+    </div>
+
+    <ul class="nav nav-pills justify-content-center">
+        <li class="nav-item">
+            <NavLink class="nav-link" href="home" Match="NavLinkMatch.All">
+                <img class="topbar-icon" src="icons/house.svg" alt="HomeIcon">
+            </NavLink>
+        </li>
+        <li class="nav-item">
+            <NavLink class="nav-link" href="calculation" Match="NavLinkMatch.Prefix">
+                <img class="topbar-icon"  src="icons/graph-up.svg" alt="GraphsIcon">
+            </NavLink>
+        </li>
+        <li class="nav-item">
+            <NavLink class="nav-link" href="community" Match="NavLinkMatch.Prefix">
+                <img class="topbar-icon" src="icons/people.svg" alt="CommunityIcon">
+            </NavLink>
+        </li>
+    </ul>
+
+    <div class="row">
+        <div class="dropdown">
+            <button class="btn rounded-circle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <img class="userAvatar-icon" src="@(ActiveUser.Avatar == null
+                ? $"https://avatar.iran.liara.run/public"
+                : $"{@TypeHelper.GetBase64String(ActiveUser.Avatar)}")" alt="avatar" />
+            </button>
+            <ul class="dropdown-menu">
+                <li><h6 class="dropdown-header">@ActiveUser.Name</h6></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><button class="dropdown-item" @onclick="@ToActiveUserProfile">Profile</button></li>
+                @if (ActiveUser.Role == UserRoles.Admin)
+                {
+                    <li><button class="dropdown-item" @onclick="@ToAdmin">Admin</button></li>
+                }
+                <li><button class="dropdown-item" @onclick="@Logout">Log out</button></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+

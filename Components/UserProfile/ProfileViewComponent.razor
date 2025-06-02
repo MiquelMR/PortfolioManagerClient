@@ -1,0 +1,26 @@
+﻿@using PortfolioManagerWASM.Helpers
+@using PortfolioManagerWASM.Services.IService
+@using Syncfusion.Blazor.SplitButtons
+
+<!--User Profile-->
+<div class="container">
+
+    <div class="row mb-4">
+        <div class="col-3">
+            <div class="col userAvatar">
+                <img src="@(ActiveUser.Avatar == null
+        ? $"https://avatar.iran.liara.run/public"
+        : $"{@TypeHelper.GetBase64String(ActiveUser.Avatar)}")" class="rounded img-fluid w-100" alt="avatar" />
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="col ms-4">
+                <div class="portfolio-title text-capitalize">@ActiveUser.Name</div>
+                <div>Register on <span style="color:var(--primary-color)">@ActiveUser.RegistrationDate</span></div>
+            </div>
+        </div>
+    </div>
+
+</div>
+

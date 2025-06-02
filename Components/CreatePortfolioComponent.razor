@@ -1,0 +1,140 @@
+﻿@using PortfolioManagerWASM.Models
+
+<div class="container py-4">
+
+    <!-- New Portfolio Form -->
+    <EditForm Model="@newPortfolio" OnValidSubmit="OnSubmitNewPortfolio">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <!-- Portfolio Name & Icon Selection -->
+        <div class="row">
+            <div class="col">
+                <label for="name" class="form-label small text-muted">Name your portfolio</label>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <!-- Icon Dropdown -->
+            <div class="col-auto dropdown align-content-center">
+                <button class="btn btn-light p-0 rounded-circle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <img class="rounded-icon" src="@newPortfolio.IconPath" alt="Portfolio Icon" />
+                </button>
+                <ul class="dropdown-menu p-2">
+                    @foreach (var icon in GetIconPaths())
+                    {
+                        <li class="d-inline-block m-1">
+                            <button class="btn p-0 border-0 bg-transparent" @onclick="() => OnSelectIcon(icon)">
+                                <img src="@icon" class="rounded-icon" alt="Icon" />
+                            </button>
+                        </li>
+                    }
+                </ul>
+            </div>
+            <div class="col-auto">
+                <InputText id="name" class="form-control form-control-lg" @bind-Value="newPortfolio.Name" />
+            </div>
+        </div>
+
+        <!-- Financial Asset Dropdown -->
+        <div class="mb-3">
+            <label class="form-label small text-muted">Add financial assets to your portfolio</label>
+            <div class="dropdown">
+                <button class="btn btn-custom dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                    Add Financial Asset
+                </button>
+                <ul class="dropdown-menu w-100">
+                    @foreach (var asset in FilteredFinancialAssets)
+                    {
+                        <li>
+                            <button type="button" class="dropdown-item d-flex justify-content-between align-items-center"
+                                    @onclick="() => OnAddFinancialAsset(asset)">
+                                <span>@asset.Name</span>
+                                @if (!string.IsNullOrEmpty(asset.IconPath))
+                                {
+                                    <img src="@asset.IconPath" alt="Icon" class="asset-icon ms-2" />
+                                }
+                                else
+                                {
+                                    <i class="bi bi-cash asset-icon ms-2"></i>
+                                }
+                            </button>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+
+        <!-- Portfolio Assets with Sliders -->
+        @if (newPortfolio.PortfolioAssets?.Any() == true)
+        {
+            <div class="mb-4">
+                @foreach (var asset in newPortfolio.PortfolioAssets)
+                {
+                    <div class="row align-items-center mb-3">
+                        <div class="col-auto d-flex align-items-center">
+                            <span class="me-2">@asset.FinancialAsset.Name</span>
+                            @if (!string.IsNullOrEmpty(asset.FinancialAsset.IconPath))
+                            {
+                                <img src="@asset.FinancialAsset.IconPath" class="img-fluid asset-icon" style="height: 24px; width: 24px;" alt="Icon" />
+                            }
+                            else
+                            {
+                                <i class="bi bi-cash asset-icon" style="font-size: 1.2rem;"></i>
+                            }
+                        </div>
+
+                        <div class="col">
+                            <SfSlider Type="SliderType.Default"
+                                      Min="0"
+                                      Max="100"
+                                      Step="1"
+                                      @bind-Value="asset.AllocationPercentage"
+                                      ShowButtons="true">
+                                <SliderTicks SmallStep="10" LargeStep="20" Placement="Placement.After" ShowSmallTicks="true" />
+                                <SliderTooltip IsVisible="true" ShowOn="TooltipShowOn.Always" />
+                            </SfSlider>
+                        </div>
+
+                        <div class="col-auto" style="width:100px">
+                            <InputNumber @bind-Value="asset.AllocationPercentage" class="form-control" />
+                        </div>
+
+                        <div class="col-auto">
+                            <button class="btn btn-sm btn-outline-danger" @onclick="() => OnRemoveFinancialAsset(asset)">
+                                X
+                            </button>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+
+        <!-- Description -->
+        <div class="mb-3">
+            <label for="description" class="form-label small text-muted">Description</label>
+            <input id="description"
+                   class="form-control"
+                   @bind-value="newPortfolio.Description"
+                   @bind-value:event="oninput"
+                   maxlength="140" />
+            <small class="form-text text-muted">
+                @(newPortfolio.Description?.Length ?? 0)/140 characters
+            </small>
+        </div>
+
+        <!-- Public Toggle -->
+        <div class="form-check mb-4">
+            <InputCheckbox id="Accessibility-checkbox" class="form-check-input" @bind-Value="isPublic" />
+            <label class="form-check-label" for="Accessibility-checkbox">
+                Make this portfolio public
+            </label>
+        </div>
+
+        <!-- Submit & Back -->
+        <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-custom">Submit</button>
+            <button type="button" class="btn btn-custom" @onclick="()=>OnClickBackButton(Pages.HomeView.Overview)">Back</button>
+        </div>
+    </EditForm>
+</div>
